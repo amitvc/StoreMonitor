@@ -1,13 +1,11 @@
 package com.catmktg.monitoring.StoreMonitor.model;
 
-import com.google.api.client.json.GenericJson;
-
 /**
  * Message header
  * @author 
  *
  */
-public class MessageHeader extends GenericJson {
+public class MessageHeader {
 	
 	private String ctry;
 	private int chn;
