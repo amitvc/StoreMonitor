@@ -2,24 +2,18 @@ package com.catmktg.monitoring.StoreMonitor;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.Header;
-import org.apache.http.HeaderIterator;
-import org.apache.http.HttpEntity;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+
 import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.RequestLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import com.catmktg.monitoring.StoreMonitor.model.HeartBeatMsg;
@@ -69,6 +63,16 @@ public class App {
             System.out.println(temp);
             HeartBeatMsg hbm = temp.get("USA:21:579");
             System.out.println(((System.currentTimeMillis()/1000)-hbm.getTs()));
+            
+            
+    		Client jerseyClient = ClientBuilder.newClient();
+    		
+    		StoreHealthData ddd = jerseyClient.target(shoprite_health_api)
+            .request(MediaType.APPLICATION_JSON)
+            .get(StoreHealthData.class);
+
+            System.out.println(ddd);
+            
         } finally {
             httpclient.close();
         }
