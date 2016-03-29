@@ -1,5 +1,8 @@
 package com.catmktg.monitoring.StoreMonitor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class HeartBeatMsg  {
 	
 	public HeartBeatMsg(String cc, int store, int chain) {
@@ -12,12 +15,24 @@ public class HeartBeatMsg  {
 		_t = "ss";
 	}
 	
+	public HeartBeatMsg() {
+		
+	}
+	
+	@JsonIgnoreProperties
+	@JsonProperty("hdr")
 	private MessageHeader hdr;
 	
+	@JsonIgnoreProperties
+	@JsonProperty("ts")
 	private long ts;
 	
+	@JsonIgnoreProperties
+	@JsonProperty("seq")
 	private String seq;
 	
+	@JsonProperty("_t")
+	@JsonIgnoreProperties
 	private String _t;
 
 	public long getTs() {

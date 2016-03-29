@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,8 +17,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import com.catmktg.monitoring.StoreMonitor.config.RetailerApiConfig;
 import com.catmktg.monitoring.StoreMonitor.model.HeartBeatMsg;
 import com.catmktg.monitoring.StoreMonitor.model.StoreHealthData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -35,46 +38,24 @@ public class App {
 	
 	public static void main(String[] args) throws IOException {
 		
-		Gson gson = new GsonBuilder().create();
 		StoreHealthData d = new StoreHealthData();
 	    Map<String, HeartBeatMsg> hm = new HashMap<String, HeartBeatMsg>();
 	    HeartBeatMsg hb1 = new HeartBeatMsg("USA", 21,396);
 	    HeartBeatMsg hb2 = new HeartBeatMsg("USA", 21,345);
 	    hm.put("USA-0044-9122", hb1);
 	    hm.put("USA-0044-9123", hb2);
-	    d.setHealthData(hm);
-		System.out.println(gson.toJson(d));
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-        try {
-        	CloseableHttpClient client = HttpClientBuilder.create().build();
-        	HttpGet getRequest = new HttpGet("http://usa.shoprite.personalization.catalinamarketing.com/proxy/rest/pos/health");
-             
-             //Set the API media type in http accept header
-            getRequest.addHeader("accept", "application/json");
-            HttpResponse response = client.execute(getRequest);
-            System.out.println("Executing request " + getRequest.getRequestLine());
-            System.out.println("----------------------------------------");
-            String apiOutput = EntityUtils.toString(response.getEntity());
-            System.out.println(apiOutput);
-            Type listType = new TypeToken<Map<String, HeartBeatMsg>>() {}.getType();
-            Map<String, HeartBeatMsg> temp = new HashMap<String, HeartBeatMsg>();
-            temp = gson.fromJson(apiOutput, listType);
-            
-            System.out.println(temp);
-            HeartBeatMsg hbm = temp.get("USA:21:579");
-            System.out.println(((System.currentTimeMillis()/1000)-hbm.getTs()));
-            
-            
-    		Client jerseyClient = ClientBuilder.newClient();
-    		
-    		StoreHealthData ddd = jerseyClient.target(shoprite_health_api)
-            .request(MediaType.APPLICATION_JSON)
-            .get(StoreHealthData.class);
+	    d.set(hm);
+	    String result = new ObjectMapper().writeValueAsString(d);
+	    System.out.println(result);
+	    
+	    Client jerseyClient = ClientBuilder.newClient();
+		
+		Response response = jerseyClient.target(shoprite_health_api)
+        .request(MediaType.APPLICATION_JSON)
+        .get();
 
-            System.out.println(ddd);
-            
-        } finally {
-            httpclient.close();
-        }
+	    Map<String, HeartBeatMsg> healthData = new HashMap<String, HeartBeatMsg>();
+	    healthData = response.readEntity(healthData.getClass());
+	    d.set(healthData);
 	}
 }
