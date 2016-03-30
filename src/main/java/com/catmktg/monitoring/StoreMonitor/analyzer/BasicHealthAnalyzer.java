@@ -39,8 +39,10 @@ public class BasicHealthAnalyzer implements StoreDataAnalyzer {
 	    	if(secondsElapsed < 0) {
 	    		secondsElapsed = 0;
 	    	}
-	    	if(secondsElapsed > 120) {
-	    		System.out.println("TouchPoint : "+ entry.getKey() + " last HB seen "+   secondsElapsed +  " seconds");	
+	    	if(secondsElapsed > 60 && secondsElapsed < 3600) {
+	    		System.out.println("TouchPoint : "+ entry.getKey() + " last HB seen "+   (secondsElapsed/60) +  " mins");	
+	    	} else if (secondsElapsed > 3600){
+	    		System.out.println("TouchPoint : "+ entry.getKey() + " last HB seen "+   (secondsElapsed/3600) +  " hours");
 	    	}
 	    }
 	}
