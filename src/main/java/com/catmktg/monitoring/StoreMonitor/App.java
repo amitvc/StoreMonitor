@@ -60,7 +60,7 @@ public class App {
 
 			// Run the health checkup job every 60 seconds
 			Trigger trigger = TriggerBuilder.newTrigger().withIdentity("healthCheckup", "group1").startNow()
-					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(60).repeatForever())
+					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(3600).repeatForever())
 					.build();
 			// Tell quartz to schedule the job using our trigger
 			sched.scheduleJob(job, trigger);
