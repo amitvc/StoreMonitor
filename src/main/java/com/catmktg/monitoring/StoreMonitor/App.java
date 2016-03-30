@@ -12,6 +12,7 @@ import org.quartz.SchedulerFactory;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 
 import com.catmktg.monitoring.StoreMonitor.analyzer.BasicHealthAnalyzer;
 import com.catmktg.monitoring.StoreMonitor.config.RetailerApiConfig;
@@ -46,7 +47,7 @@ public class App {
 
 		List<RetailerApiConfig> configList = Arrays.asList(sharedConfig, riteAidConfig, walgreensConfig);
 		
-		SchedulerFactory schedFact = new org.quartz.impl.StdSchedulerFactory();
+		SchedulerFactory schedFact = new StdSchedulerFactory();
 
 		Scheduler sched;
 		try {
@@ -54,7 +55,7 @@ public class App {
 			sched.start();
 
 			// define the job and tie it to our HelloJob class
-			JobDetail job = JobBuilder.newJob(BasicHealthAnalyzer.class).withIdentity("myJob", "group1").build();
+			JobDetail job = JobBuilder.newJob(BasicHealthAnalyzer.class).withIdentity("healthCheckup", "group1").build();
 			job.getJobDataMap().put("retailerConfig", configList);
 
 			// Run the health checkup job every 60 seconds
