@@ -1,5 +1,6 @@
 package com.catmktg.monitoring.StoreMonitor.analyzer;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class BasicHealthAnalyzer extends StoreDataAnalyzer {
 		for(RetailerApiConfig config : configList) {
 			StoreHealthData healthData = analyze(config);
 			long currentTime = System.currentTimeMillis() / 1000;
-			log.info("Generating health report for " + config.getRetailerName() + " current time : " + currentTime);
+			log.info("Generating health report for " + config.getRetailerName() + " current time : " + new Date().toString());
 		    for(Map.Entry<String, HeartBeatMsg> entry : healthData.getHealthData().entrySet()) {
 		    	long secondsElapsed = currentTime-entry.getValue().getHdr().getTs();
 		    	if(secondsElapsed < 0) {

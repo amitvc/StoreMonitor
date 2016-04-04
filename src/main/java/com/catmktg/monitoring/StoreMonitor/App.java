@@ -26,9 +26,10 @@ public class App {
 	public static final String riteaid_health_api = "http://usa.riteaid.personalization.catalinamarketing.com/proxy/rest/pos/health";
 	public static final String walgreens_health_api = "http://usa.walgreens.personalization.catalinamarketing.com/proxy/rest/pos/health";
 	public static final String shared_health_api = "http://usa.shared.personalization.catalinamarketing.com/proxy/rest/pos/health";
+	public static final String foodlion_health_api = "http://usa.foodlion.personalization.catalinamarketing.com/proxy/rest/pos/health";
+
 
 	public static void main(String[] args) throws IOException {
-
 		RetailerApiConfig shopRiteConfig = new RetailerApiConfig();
 		shopRiteConfig.setRetailerName("ShopRite");
 		shopRiteConfig.setHealthApi(shoprite_health_api);
@@ -44,8 +45,12 @@ public class App {
 		RetailerApiConfig sharedConfig = new RetailerApiConfig();
 		sharedConfig.setRetailerName("Shared");
 		sharedConfig.setHealthApi(shared_health_api);
+		
+		RetailerApiConfig foodlionConfig = new RetailerApiConfig();
+		foodlionConfig.setRetailerName("FoodLion");
+		foodlionConfig.setHealthApi(foodlion_health_api);
 
-		List<RetailerApiConfig> configList = Arrays.asList(sharedConfig, riteAidConfig, walgreensConfig);
+		List<RetailerApiConfig> configList = Arrays.asList(sharedConfig, riteAidConfig, walgreensConfig,foodlionConfig,shopRiteConfig);
 		
 		SchedulerFactory schedFact = new StdSchedulerFactory();
 
@@ -68,6 +73,5 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 }
