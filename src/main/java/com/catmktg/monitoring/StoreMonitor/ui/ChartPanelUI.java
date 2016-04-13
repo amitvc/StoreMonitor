@@ -2,16 +2,12 @@ package com.catmktg.monitoring.StoreMonitor.ui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.net.URL;
 import java.util.List;
-
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
-
 import com.catmktg.monitoring.StoreMonitor.model.TouchPoint;
 
 /**
@@ -57,5 +53,4 @@ public class ChartPanelUI extends JPanel {
 	public void addTouchPoints(String retailerId, List<TouchPoint> touchPoints) {
 		tree.addNewRetailer(retailerId, touchPoints);
 	}
-	
 }

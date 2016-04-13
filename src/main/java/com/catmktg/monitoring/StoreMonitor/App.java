@@ -18,7 +18,6 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import com.catmktg.monitoring.StoreMonitor.analyzer.BasicHealthAnalyzer;
 import com.catmktg.monitoring.StoreMonitor.config.RetailerApiConfig;
-import com.catmktg.monitoring.StoreMonitor.model.TouchPoint;
 import com.catmktg.monitoring.StoreMonitor.ui.ChartPanelUI;
 
 /**
@@ -35,6 +34,7 @@ public class App {
 
 	public static void main(String[] args) throws IOException {
 		
+		System.out.println(Runtime.getRuntime().availableProcessors());
 		JFrame mainFrame = new JFrame("Heart Beat Monitor");
 		
 		ChartPanelUI chartPanel = new ChartPanelUI();
