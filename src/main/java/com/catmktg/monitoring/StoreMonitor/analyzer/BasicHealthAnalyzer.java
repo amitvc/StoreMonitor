@@ -11,9 +11,11 @@ import org.quartz.JobExecutionException;
 
 import com.catmktg.monitoring.StoreMonitor.config.RetailerApiConfig;
 import com.catmktg.monitoring.StoreMonitor.model.HeartBeatMsg;
+import com.catmktg.monitoring.StoreMonitor.model.RetailerStat;
 import com.catmktg.monitoring.StoreMonitor.model.StoreHealthData;
 import com.catmktg.monitoring.StoreMonitor.model.TouchPoint;
 import com.catmktg.monitoring.StoreMonitor.model.TouchPoint.Level;
+import com.catmktg.monitoring.StoreMonitor.model.TouchPointStats;
 import com.catmktg.monitoring.StoreMonitor.ui.ChartPanelUI;
 
 public class BasicHealthAnalyzer extends StoreDataAnalyzer {
@@ -67,8 +69,18 @@ public class BasicHealthAnalyzer extends StoreDataAnalyzer {
 		
 		for(RetailerApiConfig config : configList) {
 			StoreHealthData healthData = analyze(config);
+			RetailerStat retailerStat = (RetailerStat) context.getJobDetail().getJobDataMap().get(config.getRetailerName());
+			if(retailerStat == null) {
+				retailerStat = new RetailerStat(config);
+				context.getJobDetail().getJobDataMap().put(config.getRetailerName(), retailerStat);
+			}
+			
 			long currentTime = System.currentTimeMillis() / 1000;
-			chartPanelUI.addTouchPoints(config.getRetailerName(), prepareTouchPointList(healthData));
+			if(chartPanelUI != null) {
+				chartPanelUI.addTouchPoints(config.getRetailerName(), prepareTouchPointList(healthData));	
+			}
+			
+			updateRetailerStats(retailerStat, config, healthData);
 			StringBuilder sb = new StringBuilder();
 			sb.append("Generating health report for " + config.getRetailerName() + " at current time : " + new Date().toString());
 			sb.append(System.lineSeparator());
@@ -87,6 +99,20 @@ public class BasicHealthAnalyzer extends StoreDataAnalyzer {
 		    		log.info("TouchPoint : "+ entry.getKey() + " last HB seen "+   String.format("%d hours %d mins %d seconds", secondsElapsed/3600, (secondsElapsed%3600)/60, (secondsElapsed%3600)%60));
 		    	}
 		    }	
+		}
+	}
+
+	private void updateRetailerStats(RetailerStat retailerStat, RetailerApiConfig config, StoreHealthData healthData) {
+		if(retailerStat.getTouchPoints().size() == 0) {
+			long currentTime = System.currentTimeMillis() / 1000;
+			retailerStat.setTouchPointsDroppedCount(0);
+			for(Map.Entry<String, HeartBeatMsg> entry : healthData.getHealthData().entrySet()) {
+		    	long secondsElapsed = currentTime-entry.getValue().getHdr().getTs();
+		    	TouchPointStats tpStat = new TouchPointStats(entry.getKey(), new Date().toString());
+		    	tpStat.setLastSeen(entry.getValue().getHdr().getTs());
+		    	tpStat.setMissedHearthBeats((int) (secondsElapsed / 30));
+		    	retailerStat.addTouchPoint(tpStat);
+		    }
 		}
 	}
 }
