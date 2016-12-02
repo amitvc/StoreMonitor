@@ -34,7 +34,6 @@ public class App {
 	public static final String tops_health_api = "http://usa.tops.personalization.catalinamarketing.com/proxy/rest/pos/health";
 	public static final String target_health_api = "http://usa.target.personalization.catalinamarketing.com/proxy/rest/pos/health";
 	public static final String kroger_health_api = "http://usa.kroger.personalization.catalinamarketing.com/proxy/rest/pos/health";
-	public static final String safeway_health_api = "http://usa.safeway.personalization.catalinamarketing.com/proxy/rest/pos/health";
 
 	private ChartPanelUI chartPanel;
 	
@@ -66,7 +65,7 @@ public class App {
 			}
 			// Run the health checkup job every 60 seconds
 			Trigger trigger = TriggerBuilder.newTrigger().withIdentity("healthCheckup", "group1").startNow()
-					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(1800).repeatForever())
+					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(120).repeatForever())
 					.build();
 			// Tell quartz to schedule the job using our trigger
 			sched.scheduleJob(job, trigger);
@@ -127,13 +126,9 @@ public class App {
 		krogerConfig.setHealthApi(kroger_health_api);
 		krogerConfig.setTouchPointCount(2200);
 
-		RetailerApiConfig safewayConfig = new RetailerApiConfig();
-		safewayConfig.setRetailerName("Safeway");
-		safewayConfig.setHealthApi(safeway_health_api);
-		safewayConfig.setTouchPointCount(1200);
 
 		List<RetailerApiConfig> configList = Arrays.asList(sharedConfig, riteAidConfig, walgreensConfig,
-				foodlionConfig,shopRiteConfig,topsRiteConfig,targetConfig,krogerConfig,safewayConfig);
+				foodlionConfig,shopRiteConfig,topsRiteConfig,targetConfig,krogerConfig);
 		App app = new App();
 		if(runWithUI) {
 			app.createUI();	
