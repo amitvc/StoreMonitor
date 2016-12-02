@@ -69,30 +69,9 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.7.3</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.2</version>
-		</dependency>
-		<!-- http://mvnrepository.com/artifact/com.google.code.gson/gson -->
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>net.spy</groupId>
-			<artifactId>spymemcached</artifactId>
-			<version>2.12.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mapdb</groupId>
-			<artifactId>mapdb</artifactId>
-			<version>3.0.0-beta5</version>
-		</dependency>
 	</dependencies>
 	<build>
-		<finalName>Storemonitor</finalName>
+		<finalName>dateutils</finalName>
 		<plugins>
 
 			<!-- download source code in Eclipse, best practice -->
@@ -112,8 +91,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
 
@@ -134,7 +113,7 @@
 								<!-- add Main-Class to manifest file -->
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>mapdb.DriverMapDb</mainClass>
+									<mainClass>com.catmktg.monitoring.StoreMonitor.App</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
